@@ -1,0 +1,61 @@
+
+.transfersPanel{
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+
+    &__panelName{
+        height: 40px;
+        display: flex;
+        align-items: center;
+
+        font-weight: bold;
+        padding: 5px 15px 0 15px;
+    }
+    &__list{}
+
+    &__item{
+        height: 40px;
+        padding: 0 15px 0 15px;
+
+        &:last-child{
+            padding-bottom: 5px;
+        }
+
+        &:hover{
+            background-color: #F1FCFF;
+        }
+    }
+
+    &__label{
+        height: 100%;
+        cursor: pointer;
+
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    // checkbox
+    &__checkbox{
+        display: block;
+        width: 20px;
+        height: 20px;
+    }
+    &__realCheckbox{
+        position: absolute;
+        clip: rect(0 0 0 0);
+    }
+    &__fakeCheckbox{
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background-image: url("../../../assets/svg/checkboxOff.svg");
+    }
+    &__realCheckbox:checked + &__fakeCheckbox{
+        background-image: url("../../../assets/svg/checkboxOn.svg");
+    }
+
+    &__labelAnn{}
+}

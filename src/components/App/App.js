@@ -1,13 +1,36 @@
 
 import React, { useState } from 'react'
-import './App.scss'
-import CompName from '../CompName/CompName'
+import style from './App.module.scss'
+import TransfersPanel from './TransfersPanel/TransfersPanel'
+import OrganizePanel from './OrganizePanel/OrganizePanel'
+import TicketsList from './TicketsList/TicketsList'
+import ShowMoreBtn from './ShowMoreBtn/ShowMoreBtn'
 
 const App=()=>{
     // const [takeMeName,setTakeMeName]=useState(undefined)
+
+    // ---------------- forTransfersPanel
+
+    // ---------------- forOrganizePanel
+
+    // ---------------- forTicketsList
+
+    // ---------------- forShowMoreBtn
+
     return (
-        <CompName/>
-        // <h1>Hello there</h1>
+        <div className={style.app}>
+            <header className={style.app__header}></header>
+            <div className={style.app__inner}>
+                <aside className={style.app__sidebar}>
+                    <TransfersPanel/>
+                </aside>
+                <main className={style.app__main}>
+                    <OrganizePanel/>
+                    <TicketsList/>
+                    <ShowMoreBtn/>
+                </main>
+            </div>
+        </div>
     )
 }
 
