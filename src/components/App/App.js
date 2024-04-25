@@ -1,12 +1,14 @@
-
 import React, { useState } from 'react'
 import style from './App.module.scss'
+
 import TransfersPanel from './TransfersPanel/TransfersPanel'
 import OrganizePanel from './OrganizePanel/OrganizePanel'
 import TicketsList from './TicketsList/TicketsList'
 import ShowMoreBtn from './ShowMoreBtn/ShowMoreBtn'
+import {test} from '../../stores/fetch'
 
 const App=()=>{
+    // test()
     // const [takeMeName,setTakeMeName]=useState(undefined)
 
     // ---------------- forTransfersPanel

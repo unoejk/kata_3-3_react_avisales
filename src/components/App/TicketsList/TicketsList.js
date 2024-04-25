@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import style from './TicketsList.module.scss'
+
 import TicketCard from './TicketCard/TicketCard'
 
 const TicketsList = (props) => {

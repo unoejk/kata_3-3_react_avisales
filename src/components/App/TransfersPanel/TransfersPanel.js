@@ -1,8 +1,19 @@
 import React, { useState } from 'react'
 import style from './TransfersPanel.module.scss'
+import { connect } from 'react-redux'
 
 const TransfersPanel = (props) => {
     // const [takeMeName,setTakeMeName]=useState(undefined)
+
+    const getFilterAllChecked=()=>{
+        for (let key in props.activeFilters){
+            if (props.activeFilters[key]===false){
+                return false
+            }
+        }
+        return true
+    }
+
     return (
         <div className={style.transfersPanel}>
             <h2 className={style.transfersPanel__panelName}>КОЛИЧЕСТВО ПЕРЕСАДОК</h2>
@@ -13,6 +24,12 @@ const TransfersPanel = (props) => {
                             <input
                                 className={style.transfersPanel__realCheckbox}
                                 type="checkbox"
+                                checked={getFilterAllChecked()}
+                                onChange={()=>{props.changeFilter('all')}}
+                                // onChange={(e)=>props.changeFilter({
+                                //     name:'all',
+                                //     val:!e.target.defaultChecked,
+                                // })}
                             />
                             <span className={style.transfersPanel__fakeCheckbox}></span>
                         </div>
@@ -25,6 +42,8 @@ const TransfersPanel = (props) => {
                             <input
                                 className={style.transfersPanel__realCheckbox}
                                 type="checkbox"
+                                checked={props.activeFilters.sans}
+                                onChange={()=>{props.changeFilter('sans')}}
                             />
                             <span className={style.transfersPanel__fakeCheckbox}></span>
                         </div>
@@ -37,6 +56,8 @@ const TransfersPanel = (props) => {
                             <input
                                 className={style.transfersPanel__realCheckbox}
                                 type="checkbox"
+                                checked={props.activeFilters.one}
+                                onChange={()=>{props.changeFilter('one')}}
                             />
                             <span className={style.transfersPanel__fakeCheckbox}></span>
                         </div>
@@ -49,6 +70,8 @@ const TransfersPanel = (props) => {
                             <input
                                 className={style.transfersPanel__realCheckbox}
                                 type="checkbox"
+                                checked={props.activeFilters.two}
+                                onChange={()=>{props.changeFilter('two')}}
                             />
                             <span className={style.transfersPanel__fakeCheckbox}></span>
                         </div>
@@ -61,6 +84,8 @@ const TransfersPanel = (props) => {
                             <input
                                 className={style.transfersPanel__realCheckbox}
                                 type="checkbox"
+                                checked={props.activeFilters.three}
+                                onChange={()=>{props.changeFilter('three')}}
                             />
                             <span className={style.transfersPanel__fakeCheckbox}></span>
                         </div>
@@ -84,4 +109,14 @@ const TransfersPanel = (props) => {
 //     },
 // }
 
-export default TransfersPanel
+const mapStateToProps=(state)=>({
+    activeFilters:state.activeFilters,
+})
+const mapDispatchToProps=(dispatch)=>({
+    changeFilter:(payload)=>dispatch({
+        type:'changeFilters',
+        payload,
+    }),
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(TransfersPanel)
