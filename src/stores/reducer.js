@@ -5,7 +5,6 @@ const initialState = {
 	error: false,
 
 	// ---- from server
-	searchId: '',
 	ticketsList: [],
 
 	// ---- options
@@ -56,12 +55,7 @@ const reducer = (state = initialState, action) => {
 				searchId: action.payload,
 			}
 		}
-		// case 'setTicketsList': {
-		// 	return {
-		// 		...state,
-		// 		ticketsList: action.payload,
-		// 	}
-		// }
+
 		case 'setTicketsList': {
 			const newTicketsList = state.ticketsList.slice()
 			newTicketsList.push(...action.payload)

@@ -19,8 +19,6 @@ const TicketsList = (props) => {
 		<ul className={style.ticketsList}>
 			<h1
 				className={classNames(style.ticketsList__message, {
-					// disabled: props.init === false || (actualTicketsList.length !== 0 && actualTicketsList.error === false),
-					// disabled: props.init === false || !(actualTicketsList.length === 0 && actualTicketsList.error === true),
 					disabled: !(
 						(props.init === true && actualTicketsList.length === 0) ||
 						(actualTicketsList.length === 0 && props.loading && actualTicketsList.error === true)

@@ -28,7 +28,7 @@ const App = (props) => {
 			'Не получилось загрузить список билетов'
 		)
 		props.setTicketsList(ticketsListRequestResult.tickets)
-		await props.updateActualTicketsList()
+		props.updateActualTicketsList()
 		if (isFirstLoading === true) {
 			props.setInit(true)
 		}
@@ -40,7 +40,6 @@ const App = (props) => {
 	useEffect(() => {
 		;(async () => {
 			const id = await tryIt(getSearchIdFS, 'Не получилось загрузить ID')
-			props.setSearchId(id)
 			await loadTicketsList(id)
 		})()
 			.catch((e) => {
@@ -82,8 +81,6 @@ const App = (props) => {
 
 const mapStateToProps = (state) => ({
 	loading: state.loading,
-	searchId: state.searchId,
-	weHaveStop: state.weHaveStop,
 })
 const mapDispatchToProps = (dispatch) => ({
 	setInit: (payload) =>
@@ -99,16 +96,6 @@ const mapDispatchToProps = (dispatch) => ({
 	setError: (payload) =>
 		dispatch({
 			type: 'setError',
-			payload,
-		}),
-	setWeHaveStop: (payload) =>
-		dispatch({
-			type: 'setWeHaveStop',
-			payload,
-		}),
-	setSearchId: (payload) =>
-		dispatch({
-			type: 'setSearchId',
 			payload,
 		}),
 	setTicketsList: (payload) =>
