@@ -16,6 +16,7 @@ const TicketCard = (props) => {
 
 	const getDurationString = (minutes) => {
 		return new Date(minutes * 60 * 1000).toLocaleString('ru-Ru', {
+			timeZone: 'UTC',
 			hour: 'numeric',
 			minute: 'numeric',
 		})
