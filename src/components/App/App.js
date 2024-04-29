@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import classNames from 'classnames'
+import { Spin } from 'antd'
 import { getSearchIdFS, getTicketsListsFS } from '../../servises/fetch'
 import style from './App.module.scss'
 import TransfersPanel from './FiltersPanel/FiltersPanel'
@@ -10,7 +11,7 @@ import ShowMoreBtn from './ShowMoreBtn/ShowMoreBtn'
 
 const App = (props) => {
 	// повторяет cb, когда не получилось сразу
-	const tryIt = async (cb, errorMessage, max, step = 1) => {
+	const tryIt = async (cb, errorMessage, max = 3, step = 1) => {
 		return cb().catch(() => {
 			if (step === max) {
 				throw new Error(errorMessage)
@@ -20,76 +21,57 @@ const App = (props) => {
 		})
 	}
 
+	// грузит билеты, пока не придёт stop
+	const loadTicketsList = async (id, isFirstLoading = true) => {
+		const ticketsListRequestResult = await tryIt(
+			() => getTicketsListsFS(id),
+			'Не получилось загрузить список билетов'
+		)
+		props.setTicketsList(ticketsListRequestResult.tickets)
+		await props.updateActualTicketsList()
+		if (isFirstLoading === true) {
+			props.setInit(true)
+		}
+		if (ticketsListRequestResult.stop !== true) {
+			await loadTicketsList(id, false)
+		}
+	}
+
 	useEffect(() => {
 		;(async () => {
-			// получаем id
-			const id = await tryIt(getSearchIdFS, 'Не получилось загрузить ID', 3)
+			const id = await tryIt(getSearchIdFS, 'Не получилось загрузить ID')
 			props.setSearchId(id)
-
-			// получаем билеты и флаг стопа
-			const ticketsListRequestResult = await tryIt(
-				() => getTicketsListsFS(id),
-				'Не получилось загрузить список билетов',
-				3
-			)
-			const ticketsList = ticketsListRequestResult.tickets
-
-			// обработка стопа
-			if (ticketsListRequestResult.stop === true) {
-				props.setWeHaveStop(true)
-			}
-
-			props.setTicketsList(ticketsList)
-			await props.updateActualTicketsList()
+			await loadTicketsList(id)
 		})()
 			.catch((e) => {
-				// компонент покажет ошибку
 				props.setError(e.message)
 			})
 			.finally(() => {
-				// компонент остановит загрузку
+				props.setInit(true)
 				props.setLoading(false)
-			})
-			.finally(() => {
-				// пробуем преодолеть стоп, если он есть,
-				// пробуем опять трижды: если не получилось, оставляем то, что получили в первый раз
-				// три попытки на не получить стоп, и в каждой из них по три попытки не получить ошибку
-				if (props.weHaveStop === true) {
-					;(async () => {
-						const tryItModeForStop = async (cb, max, step = 1) => {
-							const ticketsListRequestResult = await tryIt(
-								() => getTicketsListsFS(props.searchId),
-								false,
-								3
-							)
-							if (ticketsListRequestResult.stop === true && step !== max) {
-								return tryItModeForStop(cb, max, (step = step + 1))
-							}
-						}
-						const ticketsListRequestResult = await tryItModeForStop(
-							() => getTicketsListsFS(props.searchId),
-							3
-						)
-						if (Boolean(ticketsListRequestResult) !== false) {
-							props.setWeHaveStop(false)
-							props.setTicketsList(ticketsListRequestResult.tickets)
-							await props.updateActualTicketsList()
-						}
-					})().catch(() => {}) // чтобы не выдавало ошибку из за того что опять не получилось, и оставить то что есть
-				}
 			})
 	}, [])
 
 	return (
 		<div className={style.app}>
-			<header className={style.app__header}></header>
+			<header
+				className={classNames(style.app__header, {
+					[style['app__header--isLoading']]: props.loading === true,
+				})}
+			>
+				<Spin
+					size="large"
+					className={classNames(style.app__spin, {
+						disabled: props.loading === false,
+					})}
+				/>
+			</header>
 			<div className={style.app__inner}>
 				<aside className={style.app__sidebar}>
 					<TransfersPanel />
 				</aside>
 				<main className={style.app__main}>
 					<OrganizePanel />
-					<h1 className={classNames({ disabled: true })}>hi</h1>
 					<TicketsList />
 					<ShowMoreBtn />
 				</main>
@@ -99,10 +81,16 @@ const App = (props) => {
 }
 
 const mapStateToProps = (state) => ({
+	loading: state.loading,
 	searchId: state.searchId,
 	weHaveStop: state.weHaveStop,
 })
 const mapDispatchToProps = (dispatch) => ({
+	setInit: (payload) =>
+		dispatch({
+			type: 'setInit',
+			payload,
+		}),
 	setLoading: (payload) =>
 		dispatch({
 			type: 'setLoading',

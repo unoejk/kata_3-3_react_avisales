@@ -1,8 +1,8 @@
 const initialState = {
 	// ---- status
+	init: false,
 	loading: true,
 	error: false,
-	weHaveStop: false,
 
 	// ---- from server
 	searchId: '',
@@ -26,6 +26,13 @@ const reducer = (state = initialState, action) => {
 	switch (action.type) {
 		// ---------------- status
 
+		case 'setInit': {
+			return {
+				...state,
+				init: action.payload,
+			}
+		}
+
 		case 'setLoading': {
 			// console.log(action.payload)
 			return {
@@ -41,13 +48,6 @@ const reducer = (state = initialState, action) => {
 			}
 		}
 
-		case 'setWeHaveStop': {
-			return {
-				...state,
-				weHaveStop: action.payload,
-			}
-		}
-
 		// ---------------- from server
 
 		case 'setSearchId': {
@@ -56,10 +56,18 @@ const reducer = (state = initialState, action) => {
 				searchId: action.payload,
 			}
 		}
+		// case 'setTicketsList': {
+		// 	return {
+		// 		...state,
+		// 		ticketsList: action.payload,
+		// 	}
+		// }
 		case 'setTicketsList': {
+			const newTicketsList = state.ticketsList.slice()
+			newTicketsList.push(...action.payload)
 			return {
 				...state,
-				ticketsList: action.payload,
+				ticketsList: newTicketsList,
 			}
 		}
 

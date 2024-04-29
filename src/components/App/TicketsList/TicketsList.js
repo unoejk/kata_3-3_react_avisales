@@ -1,7 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
 import { connect } from 'react-redux'
-import { Spin } from 'antd'
 import style from './TicketsList.module.scss'
 import TicketCard from './TicketCard/TicketCard'
 
@@ -18,13 +17,17 @@ const TicketsList = (props) => {
 
 	return (
 		<ul className={style.ticketsList}>
-			<Spin size="large" className={classNames(style.ticketsList__spin, { disabled: props.loading === false })} />
 			<h1
 				className={classNames(style.ticketsList__message, {
-					disabled: actualTicketsList.length !== 0 || props.loading === true,
+					// disabled: props.init === false || (actualTicketsList.length !== 0 && actualTicketsList.error === false),
+					// disabled: props.init === false || !(actualTicketsList.length === 0 && actualTicketsList.error === true),
+					disabled: !(
+						(props.init === true && actualTicketsList.length === 0) ||
+						(actualTicketsList.length === 0 && props.loading && actualTicketsList.error === true)
+					),
 				})}
 			>
-				{props.error === false ? 'Ничего не найдено' : props.error}
+				{props.error !== false ? props.error : 'Рейсов, подходящих под заданные фильтры, не найдено'}
 			</h1>
 			{ticketsColl}
 		</ul>
@@ -32,6 +35,7 @@ const TicketsList = (props) => {
 }
 
 const mapStateToProps = (state) => ({
+	init: state.init,
 	loading: state.loading,
 	error: state.error,
 	actualTicketsList: state.actualTicketsList,

@@ -26,12 +26,22 @@ body{
 
         background-image: url("../../assets/svg/logoAvisales.svg");
         background-repeat: no-repeat;
-        background-position: center center;
+        background-position: center 35px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
         @media (max-width: 767px) {
             height: 110px;
         }
+
+        &--isLoading{
+            background-image: none;
+        }
     }
+
+    &__spin{}
 
     &__inner{
         width: 100%;
@@ -49,6 +59,7 @@ body{
     &__sidebar{
         height: fit-content;
         width: 30%;
+        flex-shrink: 0;
 
         @media (max-width: 767px) {
             width: 100%;
