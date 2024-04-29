@@ -11,21 +11,20 @@
     padding: 15px;
 
     &__header{
+        height: 36px;
+
         display: flex;
         justify-content: space-between;
+        align-items: center;
     }
 
-    &__cost{
+    &__price{
         font-size: 24px;
         font-weight: bold;
         color: #2196F3;
     }
 
-    &__logo{
-        height: 20px;
-        width: 20px;
-        background-color: tomato;
-    }
+    &__logo{}
 
     &__inner{
         display: flex;

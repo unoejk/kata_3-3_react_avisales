@@ -1,24 +1,30 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { connect } from 'react-redux'
+import classNames from 'classnames'
 import style from './ShowMoreBtn.module.scss'
 
 const ShowMoreBtn = (props) => {
-    // const [takeMeName,setTakeMeName]=useState(undefined)
-    return (
-        <button className={style.showMoreBtn}>
-            ПОКАЗАТЬ ЕЩЁ 5 БИЛЕТОВ!
-        </button>
-    )
+	return (
+		<button
+			className={classNames(style.showMoreBtn, {
+				disabled: props.ticketsShownQuantity >= props.actualTicketsListLength,
+			})}
+			onClick={props.incTicketsShownQuantity}
+		>
+			ПОКАЗАТЬ ЕЩЁ 5 БИЛЕТОВ!
+		</button>
+	)
 }
 
-// takeMeName.defaultProps={
-//     takeMeName:'',
-// }
-// takeMeName.propTypes={
-//     takeMeName:(props, propName, componentName)=>{
-//         if (typeof props[propName]==='string')
-//             return null
-//         return new TypeError(`${componentName}: ${propName} must be string`)
-//     },
-// }
+const mapStateToProps = (state) => ({
+	actualTicketsListLength: state.actualTicketsList.length,
+	ticketsShownQuantity: state.ticketsShownQuantity,
+})
+const mapDispatchToProps = (dispatch) => ({
+	incTicketsShownQuantity: () =>
+		dispatch({
+			type: 'incTicketsShownQuantity',
+		}),
+})
 
-export default ShowMoreBtn
+export default connect(mapStateToProps, mapDispatchToProps)(ShowMoreBtn)
